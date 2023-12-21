@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Calendar</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #calendar {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px;
+        }
+
+        #calendar th, #calendar td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #calendar th {
+            background-color: #4285f4;
+            color: #fff;
+        }
+
+        #event-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #event-list {
+            margin-top: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <table id="calendar">
+        <thead>
+            <tr>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+                <th>Fri</th>
+                <th>Sat</th>
+            </tr>
+        </thead>
+        <tbody id="calendar-body"></tbody>
+    </table>
+
+    <div id="event-form">
+        <h2>Add Event</h2>
+        <label for="event-date">Select date:</label>
+        <input type="date" id="event-date" required>
+        <br>
+        <label for="event-description">Event description:</label>
+        <input type="text" id="event-description" required>
+        <br>
+        <button onclick="addEvent()">Add Event</button>
+    </div>
+
+    <div id="event-list">
+        <h2>Events</h2>
+        <ul id="events"></ul>
+    </div>
+
+    <script>
+        // Function to generate calendar
+        function generateCalendar() {
+            const calendarBody = document.getElementById("calendar-body");
+            calendarBody.innerHTML = "";
+
+            const currentDate = new Date();
+            const currentMonth = currentDate.getMonth();
+            const daysInMonth = new Date(currentDate.getFullYear(), currentMonth + 1, 0).getDate();
+
+            let dayCounter = 1;
+
+            for (let i = 0; i < 6; i++) {
+                const row = document.createElement("tr");
+
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement("td");
+
+                    if ((i === 0 && j < currentDate.getDay()) || dayCounter > daysInMonth) {
+                        cell.textContent = "";
+                    } else {
+                        cell.textContent = dayCounter;
+                        dayCounter++;
+                    }
+
+                    row.appendChild(cell);
+                }
+
+                calendarBody.appendChild(row);
+            }
+        }
+
+        // Function to add event
+        function addEvent() {
+            const eventDate = document.getElementById("event-date").value;
+            const eventDescription = document.getElementById("event-description").value;
+
+            if (eventDate && eventDescription) {
+                const eventsList = document.getElementById("events");
+                const eventItem = document.createElement("li");
+                eventItem.textContent = `${eventDate}: ${eventDescription}`;
+                eventsList.appendChild(eventItem);
+
+                // Clear the input fields
+                document.getElementById("event-date").value = "";
+                document.getElementById("event-description").value = "";
+            }
+        }
+
+        // Initial calendar generation
+        generateCalendar();
+    </script>
+</body>
+</html>
